@@ -40,13 +40,13 @@ CONTAINER_TAG="v1.0.0"
 EXAMPLE_DOMAIN="example.com"
 
 _log "Delete any running/paused Docker container to avoid overlapping"
-docker rm --force terraform-dns-ns-tests || _log "Container doesn't exist"
+sudo docker rm --force terraform-dns-ns-tests || _log "Container doesn't exist"
 
 _log "Build Docker image to run terraform tests"
-docker build --tag ${CONTAINER_NAME}:${CONTAINER_TAG} ${SCRIPT_DIR}/dns-server
+sudo docker build --tag ${CONTAINER_NAME}:${CONTAINER_TAG} ${SCRIPT_DIR}/dns-server
 
 _log "Run the Docker container with systemd enabled and attach to journald service to see the logs in real time"
-docker run -d --privileged --tmpfs /tmp --tmpfs /run \
+sudo docker run -d --privileged --tmpfs /tmp --tmpfs /run \
     -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
     -v /etc/localtime:/etc/localtime:ro \
     -v ${SCRIPT_DIR}/dns-server/named.conf.none:/etc/named.conf:ro \
